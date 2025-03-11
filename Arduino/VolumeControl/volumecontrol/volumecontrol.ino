@@ -1,3 +1,12 @@
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define SCREEN_WIDTH 64
+#define SCREEN_HEIGHT 32
+#define OLED_RESET    -1
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
 #define CLK 2       // Rotary Encoder Clock (A)
 #define DT 3        // Rotary Encoder Data (B)
 #define SW 4        // Rotary Encoder Button (Mute)
@@ -21,6 +30,13 @@ void setup() {
 
     digitalWrite(DS1802_MUTE, HIGH);  // Start unmuted
     lastEncoderState = digitalRead(CLK);
+
+    // Initialize OLED Display
+    if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {  // 0x3C is the typical I2C address
+        while (true);  // Halt if OLED fails
+    }
+    display.clearDisplay();
+    updateOLED();
 }
 
 void loop() {
@@ -30,6 +46,7 @@ void loop() {
         if (digitalRead(SW) == LOW) {
             muteState = !muteState;
             digitalWrite(DS1802_MUTE, muteState ? LOW : HIGH);
+            updateOLED();
             while (digitalRead(SW) == LOW); // Wait for release
         }
     }
@@ -38,14 +55,15 @@ void loop() {
     int encoderState = digitalRead(CLK);
     if (encoderState != lastEncoderState) {
         if (digitalRead(DT) != encoderState) {
-            if (balanceMode) balance = constrain(balance + 1, -10, 10);  // Increase balance right
-            else volume = constrain(volume + 1, 0, 63);  // Increase volume
+            if (balanceMode) balance = constrain(balance + 1, -10, 10);
+            else volume = constrain(volume + 1, 0, 63);
         } else {
-            if (balanceMode) balance = constrain(balance - 1, -10, 10);  // Increase balance left
-            else volume = constrain(volume - 1, 0, 63);  // Decrease volume
+            if (balanceMode) balance = constrain(balance - 1, -10, 10);
+            else volume = constrain(volume - 1, 0, 63);
         }
 
         updateVolume();
+        updateOLED();
         lastEncoderState = encoderState;
     }
 
@@ -53,7 +71,8 @@ void loop() {
     if (digitalRead(SW) == LOW) {
         delay(500);  // Long press detection
         if (digitalRead(SW) == LOW) {
-            balanceMode = !balanceMode; // Toggle balance mode
+            balanceMode = !balanceMode;
+            updateOLED();
             while (digitalRead(SW) == LOW); // Wait for release
         }
     }
@@ -61,8 +80,10 @@ void loop() {
 
 // Function to update DS1802 volume levels
 void updateVolume() {
-    int leftVol = volume + (balance < 0 ? balance : 0);  // Reduce left if balance < 0
-    int rightVol = volume - (balance > 0 ? balance : 0); // Reduce right if balance > 0
+    int logVolume = pow(10, (volume / 63.0) * log10(63)); // Logarithmic mapping
+
+    int leftVol = logVolume + (balance < 0 ? balance : 0);
+    int rightVol = logVolume - (balance > 0 ? balance : 0);
 
     sendToDS1802(leftVol);
     sendToDS1802(rightVol);
