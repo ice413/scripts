@@ -21,6 +21,7 @@ bool balanceMode = false;
 int lastEncoderState;
 
 void setup() {
+    Serial.begin(9600);
     pinMode(CLK, INPUT_PULLUP);
     pinMode(DT, INPUT_PULLUP);
     pinMode(SW, INPUT_PULLUP);
@@ -107,13 +108,18 @@ void updateOLED() {
     display.setCursor(0, 0);
     display.print("Vol: ");
     display.print(volume);
+    Serial.print("Vol : ");
+    Serial.println(volume);
     
     display.setCursor(0, 10);
     display.print("Bal: ");
     display.print(balance);
+    Serial.print("Bal : ");
+    Serial.println(balance);
     
     display.setCursor(0, 20);
     display.print(muteState ? "Muted" : "Unmuted");
+    Serial.println(muteState ? "Muted" : "Unmuted");
     
     display.display();
 }
