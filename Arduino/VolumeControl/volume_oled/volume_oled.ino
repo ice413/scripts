@@ -1,4 +1,5 @@
 #include <Wire.h>
+#include <Encoder.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
@@ -10,9 +11,11 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define CLK 2       // Rotary Encoder Clock (A)
 #define DT 3        // Rotary Encoder Data (B)
 #define SW 4        // Rotary Encoder Button (Mute)
-#define DS1802_CLK 6  // DS1802 Clock
-#define DS1802_D 7   // DS1802 Data (D)
-#define DS1802_MUTE 5 // DS1802 Mute
+#define DS1802_CLK 5  // DS1802 Clock
+#define DS1802_D 6   // DS1802 Data (D)
+#define DS1802_MUTE 7 // DS1802 Mute
+#define DS1802_RST 8  // DS1802 Reset
+#define DS1802_ZCEN 9 // DS1802 Zero-Crossing Enable
 
 bool muteState = false;
 int volume = 15;  // Initial volume (0-63)
@@ -22,14 +25,19 @@ int lastEncoderState;
 
 void setup() {
     Serial.begin(9600);
-    pinMode(CLK, INPUT_PULLUP);
-    pinMode(DT, INPUT_PULLUP);
-    pinMode(SW, INPUT_PULLUP);
+    pinMode(CLK, INPUT_PULLUP);  // Enable internal pull-up resistor
+    pinMode(DT, INPUT_PULLUP);   // Enable internal pull-up resistor
+    pinMode(SW, INPUT_PULLUP);   // Enable internal pull-up resistor
     pinMode(DS1802_CLK, OUTPUT);
     pinMode(DS1802_D, OUTPUT);
     pinMode(DS1802_MUTE, OUTPUT);
+    pinMode(DS1802_RST, OUTPUT);
+    pinMode(DS1802_ZCEN, OUTPUT);
 
     digitalWrite(DS1802_MUTE, HIGH);  // Start unmuted
+    digitalWrite(DS1802_RST, HIGH);   // Ensure RST is high (inactive)
+    digitalWrite(DS1802_ZCEN, LOW);   // Enable zero-crossing detection
+
     lastEncoderState = digitalRead(CLK);
 
     // Initialize OLED Display
