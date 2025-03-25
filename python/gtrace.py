@@ -5,10 +5,11 @@
 # Author:        claes-nilsson
 # Created:       2025-03-18 10:35:56
 #====================================================
+
 import tkinter as tk
 from tkinter import ttk
 
-def calculate_trace_thickness(current, thickness=1.0, temperature_rise=10):
+def calculate_trace_thickness(current, thickness=1.0, temperature_rise=10, length=100):
     """
     Calculate the trace thickness for a PCB based on the given inputs.
 
@@ -16,6 +17,7 @@ def calculate_trace_thickness(current, thickness=1.0, temperature_rise=10):
     current (float): The current in Amperes.
     thickness (float): The thickness in ounces (default is 1.0 oz).
     temperature_rise (float): The temperature rise in Celsius.
+    length (float): The length of the trace in millimeters.
 
     Returns:
     float: The trace thickness in mils.
@@ -50,8 +52,9 @@ def calculate_and_display():
     current = float(current_entry.get())
     thickness = float(thickness_entry.get())
     temperature_rise = float(temp_rise_entry.get())
+    length = float(length_entry.get())
 
-    trace_thickness_mils = calculate_trace_thickness(current, thickness, temperature_rise)
+    trace_thickness_mils = calculate_trace_thickness(current, thickness, temperature_rise, length)
     trace_thickness_mm = mils_to_mm(trace_thickness_mils)
 
     result_label.config(text=f"Trace Thickness: {trace_thickness_mils:.2f} mils ({trace_thickness_mm:.2f} mm)")
@@ -74,13 +77,18 @@ ttk.Label(root, text="Temperature Rise (°C):").grid(column=0, row=2, padx=10, p
 temp_rise_entry = ttk.Entry(root)
 temp_rise_entry.grid(column=1, row=2, padx=10, pady=5)
 
+ttk.Label(root, text="Length (mm):").grid(column=0, row=3, padx=10, pady=5)
+length_entry = ttk.Entry(root)
+length_entry.grid(column=1, row=3, padx=10, pady=5)
+
 # Create and place the calculate button
 calculate_button = ttk.Button(root, text="Calculate", command=calculate_and_display)
-calculate_button.grid(column=0, row=3, columnspan=2, pady=10)
+calculate_button.grid(column=0, row=4, columnspan=2, pady=10)
 
 # Create and place the result label
 result_label = ttk.Label(root, text="Trace Thickness: ")
-result_label.grid(column=0, row=4, columnspan=2, pady=10)
+result_label.grid(column=0, row=5, columnspan=2, pady=10)
 
 # Run the application
 root.mainloop()
+
