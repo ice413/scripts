@@ -7,6 +7,7 @@
 #define SCREEN_HEIGHT 32
 #define OLED_RESET    -1
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+// test only, seems to work now.
 
 #define CLK 2       // Rotary Encoder Clock (A)
 #define DT 3        // Rotary Encoder Data (B)
