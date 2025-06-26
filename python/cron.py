@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #====================================================
-# Script Name:    cron.py
-# Description:    <Your Description Here>
+# Script Name:   cron.py
+# Description:   Create lines for crontab
 # Author:        claes-nilsson
 # Created:       2025-04-12 09:34:53
 #====================================================
