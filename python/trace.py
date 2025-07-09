@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
+
 #====================================================
 # Script Name:    trace.py
 # Description:    <Your Description Here>
 # Author:        claes-nilsson
 # Created:       2025-03-18 10:15:25
 #====================================================
+
 def calculate_trace_thickness(current, thickness=1.0, temperature_rise=10, length=100):
     """
     Calculate the trace thickness for a PCB based on the given inputs.
