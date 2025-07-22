@@ -23,6 +23,11 @@ HOST = os.getenv("DB_HOST")
 DB = os.getenv("DB_NAME")
 
 def connect():
+    """
+    Establish a connection to the PostgreSQL database.
+    Returns:
+        conn: A psycopg2 connection object.
+    """
     try:
         conn = psycopg2.connect(
             dbname=DB,
@@ -37,6 +42,10 @@ def connect():
         raise
 
 def get_size(conn, table_name):
+    """Retrieve the size of a specific table in the database.
+    Args:
+        conn: Database connection object.
+        table_name: Name of the table to check size for."""
     with conn.cursor() as cur:
         cur.execute("""
             SELECT

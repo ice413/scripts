@@ -1,0 +1,4 @@
+~/.bashrc
+XDG_DOCUMENTS_DIR
+/etc/apt/sources.list
+/etc/hosts
