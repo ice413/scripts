@@ -53,7 +53,9 @@ def create_backup_tar(backup_dir, list_file='backup_list.txt') -> None:
         with tarfile.open(backup_path, "w:gz") as tar:
             for file_path in important_files:
                 if os.path.exists(file_path):
-                    tar.add(file_path, arcname=os.path.basename(file_path))
+                    # Store with absolute path in archive
+                    arcname = file_path if file_path.startswith("/") else "/" + file_path
+                    tar.add(file_path, arcname=arcname)
                     logging.info(f'Added to backup: {file_path}')
                 else:
                     logging.warning(f'File or directory does not exist: {file_path}')
