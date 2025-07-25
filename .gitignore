@@ -1,1 +1,60 @@
 *.log
+
+# Ignore compiled Python files
+*.pyc
+__pycache__/
+
+# Ignore editor/OS files
+*.swp
+*.swo
+*.bak
+*~
+.DS_Store
+Thumbs.db
+
+# Ignore archives and binaries
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.gz
+*.rar
+*.7z
+*.exe
+*.out
+*.o
+*.a
+
+# Ignore virtual environments
+venv/
+.env/
+.envrc
+
+# Ignore node_modules if using Node.js
+node_modules/
+
+# Ignore test output
+*.coverage
+coverage/
+htmlcov/
+
+# Ignore build directories
+build/
+dist/
+
+# Ignore personal settings
+.vscode/
+.idea/
+
+# Allow scripts and config files
+!*.sh
+!*.py
+!*.pl
+!*.rb
+!*.js
+!*.conf
+!*.ini
+!*.yaml
+!*.yml
+!*.json
+!*.toml
